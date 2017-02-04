@@ -1,12 +1,10 @@
 package com.encode.app;
 
-
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import com.tngtech.java.junit.dataprovider.*;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.*;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 
 import java.io.*;
@@ -31,26 +29,26 @@ public class CreateFileTest extends TestBase {
 
     protected File dir;
 
-    @Before
-    public void setUp() {
-        dir = new File("tempDir");
-        dir.mkdir();
-        System.out.println(dir.getAbsolutePath() + " prepared");
-    }
-
-    @After
-    public void tearDown() {
-        // Cleanup
-        if (dir != null) {
-            dir.canWrite();
-            File[] files = dir.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                files[i].delete();
-            }
-            dir.delete();
+    @Rule
+    public ExternalResource methodLevelFixture = new ExternalResource() {
+        @Override
+        protected void before() throws Throwable {
+            dir = new File("tempDir");
+            dir.mkdir();
         }
-        System.out.println("Cleaned up");
-    }
+
+        @Override
+        protected void after() {
+            if (dir != null) {
+                dir.canWrite();
+                File[] files = dir.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    files[i].delete();
+                }
+                dir.delete();
+            }
+        }
+    };
 
     @DataProvider
     public static List<String> generateRandomFileName() {
@@ -71,11 +69,9 @@ public class CreateFileTest extends TestBase {
             String s;
             while ((s = reader.readLine()) != null) {
                 list.add(s + ".txt");
-                s = reader.readLine();
             }
             reader.close();
         }
-
         return list;
     }
 
