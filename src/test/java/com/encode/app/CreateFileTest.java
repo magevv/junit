@@ -4,6 +4,7 @@ import com.tngtech.java.junit.dataprovider.*;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.*;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -34,6 +35,9 @@ public class CreateFileTest extends TestBase {
     public TemporaryFolder tmp = new TemporaryFolder();
 
     @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Rule
     public ExternalResource methodLevelFixture = new ExternalResource() {
         @Override
         protected void before() throws Throwable {
@@ -61,7 +65,6 @@ public class CreateFileTest extends TestBase {
     @DataProvider
     public static List<String> readFileNamesFromFile() throws IOException {
         List<String> list = new ArrayList<>();
-
         try (BufferedReader reader = new BufferedReader(
                 new FileReader("src/test/resources/filenames.csv"))
         ) {
@@ -106,22 +109,17 @@ public class CreateFileTest extends TestBase {
     @Category(TestCategories.Negative.class)
     @Test
     @UseDataProvider("generateRandomFileName")
-    public void test4(String fileName) {
-        String exception = null;
-        String msg = null;
+    public void test4(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         dir.setReadOnly(); // Linux only
+        f.createNewFile();
+
+        // try/catch here is only for testing purposes
         try {
-            f.createNewFile();
             //throw new IOException("Permission denied");
-        } catch (IOException e) {
-            exception = e.getClass().getName();
-            msg = e.getMessage();
-        } finally {
-            SoftAssertions soft = new SoftAssertions();
-            soft.assertThat(exception).isEqualTo("java.io.IOException");
-            soft.assertThat(msg).isEqualTo("Permission denied");
-            soft.assertAll();
+        } finally  {
+            thrown.expect(IOException.class);
+            thrown.expectMessage("Permission denied");
         }
     }
 }
