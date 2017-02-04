@@ -5,6 +5,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.*;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.ExternalResource;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.*;
@@ -30,21 +31,19 @@ public class CreateFileTest extends TestBase {
     protected File dir;
 
     @Rule
+    public TemporaryFolder tmp = new TemporaryFolder();
+
+    @Rule
     public ExternalResource methodLevelFixture = new ExternalResource() {
         @Override
         protected void before() throws Throwable {
-            dir = new File("tempDir");
-            dir.mkdir();
+            dir = tmp.getRoot();
         }
 
         @Override
         protected void after() {
             if (dir != null) {
                 dir.canWrite();
-                File[] files = dir.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    files[i].delete();
-                }
                 dir.delete();
             }
         }
@@ -92,7 +91,7 @@ public class CreateFileTest extends TestBase {
     @UseDataProvider("generateRandomFileName")
     public void test2(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
-        Assert.assertTrue("Function return", f.createNewFile());
+        Assert.assertTrue("Function returns 'false', expected 'true'", f.createNewFile());
     }
 
     @Category(TestCategories.Positive.class)
@@ -101,7 +100,7 @@ public class CreateFileTest extends TestBase {
     public void test3(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         f.createNewFile(); // file exists
-        Assert.assertFalse("Function return", f.createNewFile());
+        Assert.assertFalse("Function returns 'true', expected 'false'", f.createNewFile());
     }
 
     @Category(TestCategories.Negative.class)
