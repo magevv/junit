@@ -1,9 +1,10 @@
 package com.encode.app;
 
 import com.tngtech.java.junit.dataprovider.*;
-import org.assertj.core.api.SoftAssertions;
+import org.hamcrest.CoreMatchers;
 import org.junit.*;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.TemporaryFolder;
@@ -36,6 +37,9 @@ public class CreateFileTest extends TestBase {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Rule
+    public ErrorCollector collector = new ErrorCollector();
 
     @Rule
     public ExternalResource methodLevelFixture = new ExternalResource() {
@@ -83,10 +87,8 @@ public class CreateFileTest extends TestBase {
     public void test1(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         f.createNewFile();
-        SoftAssertions soft = new SoftAssertions();
-        soft.assertThat(dir.list().length).isGreaterThan(0); // file created
-        soft.assertThat(f.getName()).isEqualTo(dir.list()[0]); // file created with correct name
-        soft.assertAll();
+        collector.checkThat(dir.list().length, CoreMatchers.not(0));
+        collector.checkThat(f.getName(), CoreMatchers.equalTo(dir.list()[0]));
     }
 
     @Category(TestCategories.Positive.class)
