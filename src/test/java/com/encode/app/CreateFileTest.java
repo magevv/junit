@@ -5,10 +5,7 @@ import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
@@ -33,7 +30,6 @@ Negative tests
 public class CreateFileTest extends TestBase {
 
     protected File dir;
-    String fileName = "test.txt";
 
     @Before
     public void setUp() {
