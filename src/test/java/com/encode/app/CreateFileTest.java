@@ -71,11 +71,9 @@ public class CreateFileTest extends TestBase {
             String s;
             while ((s = reader.readLine()) != null) {
                 list.add(s + ".txt");
-                s = reader.readLine();
             }
             reader.close();
         }
-
         return list;
     }
 
