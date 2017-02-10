@@ -1,11 +1,9 @@
 package com.encode.app;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 
-/**
- * Global fixture for test classes.
- */
 public class TestBase {
 
     @ClassRule
@@ -20,5 +18,8 @@ public class TestBase {
             System.out.println("----- System stopped -----");
         }
     };
+
+    @Rule
+    public RestartFailedRule restartFailed = new RestartFailedRule();
 
 }

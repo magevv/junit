@@ -81,6 +81,18 @@ public class CreateFileTest extends TestBase {
         return list;
     }
 
+    private static int attempt = 1;
+
+    @Test
+    @Unstable(4)
+    public void unstableTest() {
+        if (attempt == 5) {
+            attempt = 1;
+        } else {
+            Assert.fail("Failed after " + (attempt++) + " attempts");
+        }
+    }
+
     @Category(TestCategories.Positive.class)
     @Test
     @UseDataProvider("generateRandomFileName")
