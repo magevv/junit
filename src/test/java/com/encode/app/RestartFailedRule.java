@@ -36,7 +36,10 @@ public class RestartFailedRule implements TestRule {
                         }
                     }
                 }
-            } else base.evaluate();
+            } else {
+                base.evaluate();
+            }
+            System.out.println("Passed: " + desc);
         }
     }
 }
