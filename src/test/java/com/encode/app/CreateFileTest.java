@@ -11,9 +11,6 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /*
 Testing Java function File.createNewFile()
@@ -57,29 +54,6 @@ public class CreateFileTest extends TestBase {
         }
     };
 
-    @DataProvider
-    public static List<String> generateRandomFileName() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            list.add("tempfile" + new Random().nextInt() + ".txt");
-        }
-        return list;
-    }
-
-    @DataProvider
-    public static List<String> readFileNamesFromFile() throws IOException {
-        List<String> list = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader("src/test/resources/filenames.csv"))
-        ) {
-            String s;
-            while ((s = reader.readLine()) != null) {
-                list.add(s + ".txt");
-            }
-            reader.close();
-        }
-        return list;
-    }
 
     private static int attempt = 1;
 
@@ -95,7 +69,7 @@ public class CreateFileTest extends TestBase {
 
     @Category(TestCategories.Positive.class)
     @Test
-    @UseDataProvider("generateRandomFileName")
+    @UseDataProvider(value = "fileNamesDataLoader", location = MyDataPovider.class)
     public void test1(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         f.createNewFile();
@@ -105,7 +79,7 @@ public class CreateFileTest extends TestBase {
 
     @Category(TestCategories.Positive.class)
     @Test
-    @UseDataProvider("generateRandomFileName")
+    @UseDataProvider(value = "fileNamesDataLoader", location = MyDataPovider.class)
     public void test2(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         Assert.assertTrue("Function returns 'false', expected 'true'", f.createNewFile());
@@ -113,7 +87,7 @@ public class CreateFileTest extends TestBase {
 
     @Category(TestCategories.Positive.class)
     @Test
-    @UseDataProvider("readFileNamesFromFile")
+    @UseDataProvider(value = "fileNamesDataLoader", location = MyDataPovider.class)
     public void test3(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         f.createNewFile(); // file exists
@@ -122,7 +96,7 @@ public class CreateFileTest extends TestBase {
 
     @Category(TestCategories.Negative.class)
     @Test
-    @UseDataProvider("generateRandomFileName")
+    @UseDataProvider(value = "fileNamesDataLoader", location = MyDataPovider.class)
     public void test4(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         dir.setReadOnly(); // Linux only
