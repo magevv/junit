@@ -13,7 +13,6 @@ import java.util.Random;
 
 public class MyDataPovider {
 
-
     @DataProvider
     public static List<String> fileNamesDataLoader(FrameworkMethod testMethod) throws IOException {
 
@@ -22,7 +21,6 @@ public class MyDataPovider {
         return testDataFile == null ? generateRandomFileName() : readFileNamesFromFile(testDataFile.value());
 
     }
-
 
 
     public static List<String> generateRandomFileName() {

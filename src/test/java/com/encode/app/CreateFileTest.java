@@ -70,6 +70,7 @@ public class CreateFileTest extends TestBase {
     @Category(TestCategories.Positive.class)
     @Test
     @UseDataProvider(value = "fileNamesDataLoader", location = MyDataPovider.class)
+    @ExternalFile("src/test/resources/filenames.csv")
     public void test1(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         f.createNewFile();
@@ -80,6 +81,7 @@ public class CreateFileTest extends TestBase {
     @Category(TestCategories.Positive.class)
     @Test
     @UseDataProvider(value = "fileNamesDataLoader", location = MyDataPovider.class)
+    @ExternalFile("src/test/resources/filenames.csv")
     public void test2(String fileName) throws IOException {
         File f = new File(dir + "/" + fileName);
         Assert.assertTrue("Function returns 'false', expected 'true'", f.createNewFile());
