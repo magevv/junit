@@ -30,7 +30,7 @@ public class RestartFailedRule implements TestRule {
                         base.evaluate();
                         break;
                     } catch (Throwable t) {
-                        System.out.println("Failed and restarted: " + desc);
+                        System.out.println(i + " attempt failed... restarting: " + desc);
                         if (i == unstable.value() - 1) {
                             base.evaluate();
                         }
