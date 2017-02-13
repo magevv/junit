@@ -24,7 +24,7 @@ public class RestartFailedRule implements TestRule {
         @Override
         public void evaluate() throws Throwable {
             Unstable unstable = desc.getAnnotation(Unstable.class);
-            if (unstable != null) {
+            if (unstable != null && unstable.value() > 1) {
                 for (int i = 1; i < unstable.value(); i++) {
                     try {
                         base.evaluate();

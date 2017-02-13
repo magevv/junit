@@ -84,9 +84,9 @@ public class CreateFileTest extends TestBase {
     private static int attempt = 1;
 
     @Test
-    @Unstable(5)
+    @Unstable(1)
     public void unstableTest() {
-        if (attempt == 5) {
+        if (attempt == 2) {
             attempt = 1;
         } else {
             Assert.fail("Failed after " + (attempt++) + " attempts");
